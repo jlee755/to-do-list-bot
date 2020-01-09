@@ -30,6 +30,15 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
         args = args.splice(1);
         switch(cmd) {
+            
+            // !info
+            case "info":
+                bot.sendMessage({
+                    to: user,
+                    message: "To-Do-List Bot info!"
+                });
+            break;
+
             // !ping
             case 'ping':
                 bot.sendMessage({
@@ -37,6 +46,8 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     message: 'Pong!'
                 });
             break;
+            
+            // !add
             case "add":
                 if(args[1] != ""){
                     bot.sendMessage({
