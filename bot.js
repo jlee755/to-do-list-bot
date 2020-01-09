@@ -34,7 +34,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             // !info
             case "info":
                 bot.sendMessage({
-                    to: user,
+                    to: channelID,
                     message: "To-Do-List Bot info: \n" +
                              "Version: " + "lol jk" + "\n" +
                              "This bot does this and that"
