@@ -1,0 +1,16 @@
+{
+    "name": "to-do-list-bot",
+    "version": "1.0.0",
+    "description": "Tasker Bot is a Discord bot that performs simple functions to add, update, and remove tasks",
+    "main": "bot.js",
+    "author": [
+        "Joshua Lee"
+    ],
+    "contributors": [
+        "Joseph Kwon"
+    ],
+    "dependencies": {
+        "discord.io": "https://github.com/woor/discord.io/tarball/gateway_v6",
+        "winston": "^3.2.1"
+    }
+}
