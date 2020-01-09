@@ -24,12 +24,9 @@ bot.on('ready', function (evt) {
 bot.on('message', function (user, userID, channelID, message, evt) {
     // Our bot needs to know if it will execute a command
     // It will listen for messages that will start with `!`
-    if (message.substring(0, 1) == '!') {
-        var args = message.substring(1).split(' ');
-        var cmd = args[0];
+    let args = message.content.substring(PREFIX.length).split(" ");
 
-        args = args.splice(1);
-        switch(cmd) {
+        switch(args[0]) {
             
             // !info
             case "info":
@@ -53,7 +50,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             // !add
             case "add":
 
-                let addedCommand = args[0];
+                let addedCommand = args[1];
 
                 if(typeof(addedCommand) == String){
 
@@ -73,4 +70,4 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             // Just add any case commands if you want to..
         }
     }
-});
+);
