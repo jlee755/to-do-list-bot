@@ -53,13 +53,16 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             // !add
             case "add":
 
-                if(args[1] != ""){
+                let addedCommand = args[0];
 
-                    let addedCommand = args[0];
+                if(typeof(addedCommand) == String){
+
+                    // Set bool completed to 0 indicating the task is not done
+                    // Store addedCommand into a sql database so that tasks aren't lost on restart
 
                     bot.sendMessage({
                         to: channelID,
-                        message: username + " has added " + addedCommand + " to the to-do list"
+                        message: username + " has added " + addedCommand + " to the to-do list"          
                     });
                 } else {
                     bot.sendMessage({
