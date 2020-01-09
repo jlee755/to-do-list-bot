@@ -36,7 +36,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 bot.sendMessage({
                     to: user,
                     message: "To-Do-List Bot info: \n" +
-                             "Version: " + version + "\n" +
+                             "Version: " + "lol jk" + "\n" +
                              "This bot does this and that"
                              // Create an actual info. This is filler text
                 });
