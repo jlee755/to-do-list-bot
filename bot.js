@@ -52,10 +52,14 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             
             // !add
             case "add":
+
                 if(args[1] != ""){
+
+                    let addedCommand = args[0];
+
                     bot.sendMessage({
                         to: channelID,
-                        message: user + " has added " + args[1] + " to the to-do list"
+                        message: username + " has added " + addedCommand + " to the to-do list"
                     });
                 } else {
                     bot.sendMessage({
