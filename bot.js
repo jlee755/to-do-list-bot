@@ -37,6 +37,18 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     message: 'Pong!'
                 });
             break;
+            case "add":
+                if(args[1] != ""){
+                    bot.sendMessage({
+                        to: channelID,
+                        message: user + " has added " + args[1] + " to the to-do list"
+                    });
+                } else {
+                    bot.sendMessage({
+                        message: "You can not add nothing to the list!"
+                    });
+                }
+            break;
             // Just add any case commands if you want to..
         }
     }
