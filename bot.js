@@ -24,9 +24,12 @@ bot.on('ready', function (evt) {
 bot.on('message', function (user, userID, channelID, message, evt) {
     // Our bot needs to know if it will execute a command
     // It will listen for messages that will start with `!`
-    let args = message.content.substring(PREFIX.length).split(" ");
+    if (message.substring(0, 1) == '!') {
+        var args = message.substring(1).split(' ');
+        var cmd = args[0];
 
-        switch(args[0]) {
+        args = args.slice(1);
+        switch(cmd) {
             
             // !info
             case "info":
@@ -50,19 +53,20 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             // !add
             case "add":
 
-                let addedCommand = args[1];
+                let addedCommand = args[0];
 
-                if(typeof(addedCommand) == String){
+                if(typeof addedCommand === 'string'){
 
                     // Set bool completed to 0 indicating the task is not done
                     // Store addedCommand into a sql database so that tasks aren't lost on restart
 
                     bot.sendMessage({
                         to: channelID,
-                        message: username + " has added " + addedCommand + " to the to-do list"          
+                        message: user + " has added " + addedCommand + " to the to-do list"          
                     });
                 } else {
                     bot.sendMessage({
+                        to: channelID,
                         message: "You can not add nothing to the list!"
                     });
                 }
@@ -70,4 +74,4 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             // Just add any case commands if you want to..
         }
     }
-);
+});
