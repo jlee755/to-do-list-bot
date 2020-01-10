@@ -14,6 +14,10 @@ pipeline {
         }
         stage('Deployment') {
             steps {
+                withCredentials(
+                    [file(credentialsId: 'Discord-Bot-Auth', variable: 'FILE')] {
+                        sh 'cp .'
+                    }
                 sh './jenkins/scripts/deploy.sh'
             }
         }
