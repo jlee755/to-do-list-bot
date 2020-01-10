@@ -16,7 +16,7 @@ pipeline {
             steps {
                 withCredentials(
                     [file(credentialsId: 'Discord-Bot-Auth', variable: 'FILE')]) {
-                        sh 'cp .'
+                        sh 'cp $FILE .'
                     }
                 sh './jenkins/scripts/deploy.sh'
             }
