@@ -15,5 +15,6 @@ To-Do List Bot is a Discord bot that performs simple functions to add, update, a
 * Update
 
 ## Authors
+* Sammy Chang
 * Joseph Kwon
 * Joshua Lee
