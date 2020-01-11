@@ -1,0 +1,25 @@
+pipeline {
+    agent {
+        docker {
+            image 'node'
+            args '-p 3000:3000'
+        }
+    }
+
+    stages {
+        stage('Build') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        stage('Deployment') {
+            steps {
+                withCredentials(
+                    [file(credentialsId: 'Discord-Bot-Auth', variable: 'FILE')]) {
+                        sh 'cp $FILE .'
+                    }
+                sh './jenkins/scripts/deploy.sh'
+            }
+        }
+    }
+}

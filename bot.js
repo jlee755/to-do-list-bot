@@ -28,7 +28,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
         var args = message.substring(1).split(' ');
         var cmd = args[0];
 
-        args = args.splice(1);
+        args = args.slice(1);
         switch(cmd) {
             
             // !info
@@ -55,17 +55,18 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
                 let addedCommand = args[0];
 
-                if(typeof(addedCommand) == String){
+                if(typeof addedCommand === 'string'){
 
                     // Set bool completed to 0 indicating the task is not done
                     // Store addedCommand into a sql database so that tasks aren't lost on restart
 
                     bot.sendMessage({
                         to: channelID,
-                        message: username + " has added " + addedCommand + " to the to-do list"          
+                        message: user + " has added " + addedCommand + " to the to-do list"          
                     });
                 } else {
                     bot.sendMessage({
+                        to: channelID,
                         message: "You can not add nothing to the list!"
                     });
                 }
