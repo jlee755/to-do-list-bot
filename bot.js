@@ -35,10 +35,16 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             case "info":
                 bot.sendMessage({
                     to: channelID,
-                    message: "To-Do-List Bot info: \n" +
-                             "Version: " + "lol jk" + "\n" +
-                             "This bot does this and that"
-                             // Create an actual info. This is filler text
+
+                    embed: {
+
+                        title: "Info aobut To-Do-List Bot",
+                        url: "https://github.com/jlee755/to-do-list-bot",
+                        description: "To-Do-List Bot info: \n" +
+                                     "Version: " + "lol jk" + "\n" +
+                                     "This bot does this and that"
+                                // Create an actual info. This is filler text
+                    }
                 });
             break;
 
