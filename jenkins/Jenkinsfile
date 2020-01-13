@@ -20,7 +20,7 @@ pipeline {
                     }
                 sh './jenkins/scripts/deploy.sh'
                 input message: 'Finished? (Click "Proceed" to continue)'
-                rm -f auth.json
+                sh 'rm -f auth.json'
             }
         }
     }
