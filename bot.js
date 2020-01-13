@@ -61,7 +61,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
                 let addedItem = args;
 
-                if(Array.isArray(addedItem) && typeof addedItem[0] === 'string'){
+                if(Array.isArray(addedItem) && addedItem.every(function(i){ return typeof i === "string" })){
 
                     // Create and set bool completed to 0 indicating the task is not done
                     // Store addedItem into a sql database so that tasks aren't lost on restart
@@ -70,7 +70,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
                     bot.sendMessage({
                         to: channelID,
-                        message: user + " has added " + addedItem + " to the to-do list"          
+                        message: user + " has added " + addedItem.join(" ") + " to the to-do list"          
                     });
 
                 } else {
