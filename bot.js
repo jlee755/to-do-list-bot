@@ -61,7 +61,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
                 let addedItem = args;
 
-                if(typeof addedItem === 'string'){
+                if(typeof addedItem === 'array' && typeof addedItem[0] === 'string'){
 
                     // Create and set bool completed to 0 indicating the task is not done
                     // Store addedItem into a sql database so that tasks aren't lost on restart
