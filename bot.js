@@ -1,6 +1,7 @@
 var Discord = require('discord.io');
 var logger = require('winston');
 var auth = require('./auth.json');
+var mysql = require('mysql');
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -14,6 +15,13 @@ var bot = new Discord.Client({
    token: auth.token,
    autorun: true
 });
+
+/*var con = mysql.createConnection({
+    host: "HOST",
+    user: "USERNAME",
+    password: "PASSWORD",
+    databse: "DATABASE"
+})*/
 
 bot.on('ready', function (evt) {
     logger.info('Connected');
@@ -57,15 +65,36 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
                 if(typeof addedItem === 'string'){
 
-                    // Create and set bool completed to 0 indicating the task is not done
-                    // Store addedItem into a sql database so that tasks aren't lost on restart
+                    //if(Check that addedItem is not already in sql databse) {
 
-                    // bool completed = 0
+                        // bool completed = 0; Store in sql
+                        // string? toSql = addedItem; Store in sql
 
-                    bot.sendMessage({
-                        to: channelID,
-                        message: user + " has added " + addedItem + " to the to-do list"          
-                    });
+                        /*con.connect(function(err){
+
+                            if(err) throw err;
+                            console.log("Connected");
+                        
+                            var sql = "INSERT INTO to-do-list (user, task, completed) VALUES (username, toSql, completed)";
+
+                            con.query(sql, function(err, result) {
+                                if(err) throw err;
+                                console.log("1 log inserted")
+                            });
+                        
+                        });*/
+
+                        bot.sendMessage({
+                            to: channelID,
+                            message: user + " has added " + addedItem + " to the to-do list"          
+                        });
+
+                    /*} else {
+                        bot.sendMessage({
+                            to: channelID,
+                            message: "That already exists in the to-do list!"
+                        })
+                    }*/
 
                 } else {
                     bot.sendMessage({
