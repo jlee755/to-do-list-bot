@@ -67,6 +67,10 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                         to: channelID,
                         embed: {
                             title: "Task List",
+                            color: 11027200,
+                            thumbnail: {
+                                url: "https://media1.giphy.com/media/wBf9D9itRvhgA/giphy.gif?cid=790b76110a92c3bce45df86c0b5b8698e35875e01553b106&rid=giphy.gif"
+                            },
                             fields: newResult
                         }
                     });
