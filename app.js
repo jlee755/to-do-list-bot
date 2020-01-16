@@ -1,6 +1,7 @@
 var Discord = require('discord.io');
 var logger = require('winston');
 var auth = require('./auth.json');
+var db = require('./database');
 
 // Configure logger settings
 logger.remove(logger.transports.Console);
@@ -48,12 +49,37 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 });
             break;
 
+            // !list
+            case "list":
+                db.query('SELECT task,description FROM to_do_list', function (err, result, fields) {
+
+                    var newResult = result.map(function(obj) {
+                        obj.name = obj.task;
+                        obj.value = obj.description;
+                        delete obj.task;
+                        delete obj.description;
+                        return obj;
+                    });
+
+                    if (err) throw new Error(err);
+
+                    bot.sendMessage({
+                        to: channelID,
+                        embed: {
+                            title: "Task List",
+                            fields: newResult
+                        }
+                    });
+                });
+            break;
+
             // !ping
             case 'ping':
                 bot.sendMessage({
                     to: channelID,
                     message: 'Pong!'
                 });
+
             break;
             
             // !add
