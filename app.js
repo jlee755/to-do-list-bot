@@ -51,17 +51,23 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
             // !list
             case "list":
-                db.query('SELECT task,description FROM to_do_list', function (err, result, fields) {
-
-                    var newResult = result.map(function(obj) {
-                        obj.name = obj.task;
-                        obj.value = obj.description;
-                        delete obj.task;
-                        delete obj.description;
-                        return obj;
-                    });
+                db.query('SELECT id,task,completed FROM to_do_list', function (err, result, fields) {
 
                     if (err) throw new Error(err);
+
+                    var newResult = result.map(function(obj) {
+                        if (obj.completed) {
+                            obj.name = "~~Task ID: " + obj.id + "~~";
+                            obj.value = "~~" + obj.task + "~~";
+                        } else {
+                            obj.name = "Task ID: " + obj.id;
+                            obj.value = obj.task;
+                        }
+                        delete obj.id;
+                        delete obj.task;
+                        delete obj.completed;
+                        return obj;
+                    });
 
                     bot.sendMessage({
                         to: channelID,
@@ -93,8 +99,14 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
                 if(Array.isArray(addedItem) && addedItem.every(function(i){ return typeof i === "string" })){
 
+                    var taskAdded = addedItem.join(" ");
+
                     // Create and set bool completed to 0 indicating the task is not done
                     // Store addedItem into a sql database so that tasks aren't lost on restart
+                    var sqlQuery = "INSERT INTO to_do_list(task) VALUES ('" + taskAdded + "')";
+                    db.query(sqlQuery, function(err, result) {
+                        if (err) throw new Error(err);
+                    });
 
                     // bool completed = 0
 
