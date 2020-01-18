@@ -4,7 +4,8 @@ var pool = mysql.createPool({
     host: 'localhost',
     user: 'bot_user',
     password: 'password',
-    database: 'to_do_list_bot'
+    database: 'to_do_list_bot',
+    charset: 'utf8mb4'
 })
 pool.getConnection((err, connection) => {
     if (err) {
