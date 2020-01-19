@@ -122,6 +122,17 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     });
                 }
             break;
+
+            // !finish
+            case "finish":
+
+                let taskId = args[0];
+
+                bot.sendMessage({
+                    to: channelID,
+                    message: "Marked task #" + taskId + " complete. Or do we want to use task name instead?"
+                });
+            break;
             // Just add any case commands if you want to..
         }
     }
