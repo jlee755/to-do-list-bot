@@ -19,6 +19,8 @@ pipeline {
                         sh 'cp $FILE .'
                     }
                 sh './jenkins/scripts/deploy.sh'
+                input message: 'Finished? (Click "Proceed" to continue)'
+                sh 'rm -f auth.json'
             }
         }
     }
