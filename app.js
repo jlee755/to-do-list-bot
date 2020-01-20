@@ -96,7 +96,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
                         obj.name = (ind+1)+
                                    " - Completed on "+
-                                   obj.completed_at.toLocaleString()+".";
+                                   obj.completed_at.toLocaleString()+" Eastern.";
                         obj.value = obj.task;
                         delete obj.id;
                         delete obj.task;
