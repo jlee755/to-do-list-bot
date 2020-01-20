@@ -42,7 +42,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     embed: {
                         title: "Help: Commands",
                         color: 11027200,
-                        description: display_Command_List
+                        description: display_Command_List.toString()
                     }
                 });
 
