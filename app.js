@@ -129,6 +129,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 let taskId = args[0];
 
                 if (!isNaN(taskId)) {
+                    logger.info("Trying to mark " + taskId + " completed.");
                     var sqlQuery = "UPDATE to_do_list SET completed = true WHERE id = " + taskId;
                     db.query(sqlQuery, function(err,result) {
                         if (err) throw new Error(err);
@@ -145,7 +146,17 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                                     taskId +
                                     " complete.\nDo we want to use task name instead?"
                             });
+                        } else {
+                            bot.sendMessage({
+                                to: channelID,
+                                message: "No task with ID " + taskId + "."
+                            });
                         };
+                    });
+                } else {
+                    bot.sendMessage({
+                        to: channelID,
+                        message: taskId + " is not a valid task ID."
                     });
                 }
             break;
