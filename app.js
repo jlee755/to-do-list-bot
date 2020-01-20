@@ -83,6 +83,40 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 });
             break;
 
+            // !completed
+            case 'completed':
+                var sqlQuery = "SELECT id,task,completed_at " +
+                               "FROM to_do_list " +
+                               "WHERE completed=true " +
+                               "ORDER BY id ASC";
+                db.query(sqlQuery, function (err, result, fields) {
+                    if (err) throw new Error(err);
+
+                    var newResult = result.map(function(obj,ind) {
+
+                        obj.name = (ind+1)+
+                                   " - Completed on "+
+                                   obj.completed_at.toLocaleString()+".";
+                        obj.value = obj.task;
+                        delete obj.id;
+                        delete obj.task;
+                        delete obj.completed_at;
+                        return obj;
+
+                    });
+
+                    bot.sendMessage({
+                        to: channelID,
+                        embed: {
+                            Title: "Completed Tasks",
+                            color: 11027200,
+                            fields: newResult
+                        }
+                    });
+                });
+
+            break;
+
             // !ping
             case 'ping':
                 bot.sendMessage({
