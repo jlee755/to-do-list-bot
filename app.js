@@ -32,6 +32,23 @@ bot.on('message', function (user, userID, channelID, message, evt) {
         args = args.slice(1);
         switch(cmd) {
             
+            // !help
+            case "help":
+            
+                let display_Command_List = ["!add","!finish", "!info", "!list", "!ping"];
+
+                bot.sendMessage({
+                    to: channelID,
+                    embed: {
+                        title: "Help is on the way!",
+                        color: 11027200,
+                        fields: "Commands",
+                        description: display_Command_List
+                    }
+                });
+
+            break;
+
             // !info
             case "info":
                 bot.sendMessage({
