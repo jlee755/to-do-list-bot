@@ -124,7 +124,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             break;
 
             // !finish
-            case "finish":
+            case "complete":
 
                 let taskId = args[0];
 
