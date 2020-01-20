@@ -5,7 +5,8 @@ var pool = mysql.createPool({
     user: 'bot_user',
     password: 'password',
     database: 'to_do_list_bot',
-    charset: 'utf8mb4'
+    charset: 'utf8mb4',
+    timezone: 'local'
 })
 pool.getConnection((err, connection) => {
     if (err) {
