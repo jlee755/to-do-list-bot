@@ -122,6 +122,45 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     });
                 }
             break;
+
+            // !finish
+            case "finish":
+
+                let taskId = args[0];
+
+                if (!isNaN(taskId)) {
+                    logger.info("Trying to mark " + taskId + " completed.");
+                    var sqlQuery = "UPDATE to_do_list SET completed = true WHERE id = " + taskId;
+                    db.query(sqlQuery, function(err,result) {
+                        if (err) throw new Error(err);
+
+                        if (result.affectedRows && !result.changedRows) {
+                            bot.sendMessage({
+                                to: channelID,
+                                message: "Task #" + taskId + " already complete."
+                            });
+                        } else if (result.affectedRows && result.changedRows) {
+                            bot.sendMessage({
+                                to: channelID,
+                                message: "Marked task #" +
+                                    taskId +
+                                    " complete.\nDo we want to use task name instead?"
+                            });
+                        } else {
+                            bot.sendMessage({
+                                to: channelID,
+                                message: "No task with ID " + taskId + "."
+                            });
+                        };
+                    });
+                } else {
+                    bot.sendMessage({
+                        to: channelID,
+                        message: taskId + " is not a valid task ID."
+                    });
+                }
+            break;
+
             // Just add any case commands if you want to..
         }
     }
