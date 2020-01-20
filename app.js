@@ -128,11 +128,28 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
                 let taskId = args[0];
 
-                bot.sendMessage({
-                    to: channelID,
-                    message: "Marked task #" + taskId + " complete. Or do we want to use task name instead?"
-                });
+                if (!isNaN(taskId)) {
+                    var sqlQuery = "UPDATE to_do_list SET completed = true WHERE id = " + taskId;
+                    db.query(sqlQuery, function(err,result) {
+                        if (err) throw new Error(err);
+
+                        if (result.affectedRows && !result.changedRows) {
+                            bot.sendMessage({
+                                to: channelID,
+                                message: "Task #" + taskId + " already complete."
+                            });
+                        } else if (result.affectedRows && result.changedRows) {
+                            bot.sendMessage({
+                                to: channelID,
+                                message: "Marked task #" +
+                                    taskId +
+                                    " complete.\nDo we want to use task name instead?"
+                            });
+                        };
+                    });
+                }
             break;
+
             // Just add any case commands if you want to..
         }
     }
