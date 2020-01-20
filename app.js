@@ -22,6 +22,8 @@ bot.on('ready', function (evt) {
     logger.info(bot.username + ' - (' + bot.id + ')');
 });
 
+var taskId;
+
 bot.on('message', function (user, userID, channelID, message, evt) {
     // Our bot needs to know if it will execute a command
     // It will listen for messages that will start with `!`
@@ -178,7 +180,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             // !complete
             case "complete":
 
-                let taskId = args[0];
+                taskId = args[0];
 
                 if (!isNaN(taskId)) {
                     logger.info("Trying to mark " + taskId + " completed.");
@@ -213,6 +215,51 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 }
             break;
 
+            // !update
+            case "update":
+
+                taskId = args[0];
+                arg_as_string = args.slice(1).join(" ");
+
+                if (!isNaN(taskId)) {
+                    if (args) {
+                        var sqlQuery = "UPDATE to_do_list SET task = ?, completed = false, completed_at = NULL WHERE id = ?";
+                        db.query(sqlQuery,[arg_as_string, taskId],function(err,result) {
+                            if (err) throw new Error(err);
+
+                            if (result.affectedRows && !result.changedRows) {
+                                // Task name didn't change and not complete.
+                                bot.sendMessage({
+                                    to: channelID,
+                                    message: "Nothing to update."
+                                });
+                            } else if (result.affectedRows && result.changedRows) {
+                                // New task name.
+                                bot.sendMessage({
+                                    to: channelID,
+                                    message: "Updated task " + taskId + " to " + arg_as_string
+                                });
+                            } else {
+                                bot.sendMessage({
+                                    to: channelID,
+                                    message: "No task with ID " + taskId + "."
+                                });
+                            };
+
+                        });
+                    } else {
+                        bot.sendMessage({
+                            to: channelID,
+                            message: "No new task given."
+                        });
+                    }
+                } else {
+                    bot.sendMessage({
+                        to: channelID,
+                        message: taskId + " is not a valid task ID."
+                    });
+                };
+            break;
             // Just add any case commands if you want to..
         }
     }
