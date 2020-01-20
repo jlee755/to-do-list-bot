@@ -35,7 +35,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             // !help
             case "help":
             
-                let display_Command_List = ["!add","!finish", "!info", "!list", "!ping"];
+                let display_Command_List = ["!add","!complete", "!completed", "!info", "!list", "!ping"];
 
                 bot.sendMessage({
                     to: channelID,
