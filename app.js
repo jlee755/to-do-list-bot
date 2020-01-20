@@ -51,22 +51,24 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
             // !list
             case "list":
-                db.query('SELECT id,task,completed FROM to_do_list', function (err, result, fields) {
+                var sqlQuery = "SELECT id,task " +
+                               "FROM to_do_list " +
+                               "WHERE completed=false " +
+                               "ORDER BY id ASC";
+                db.query(sqlQuery, function (err, result, fields) {
 
                     if (err) throw new Error(err);
 
                     var newResult = result.map(function(obj) {
-                        if (obj.completed) {
-                            obj.name = "~~Task ID: " + obj.id + "~~";
-                            obj.value = "~~" + obj.task + "~~";
-                        } else {
-                            obj.name = "Task ID: " + obj.id;
-                            obj.value = obj.task;
-                        }
+
+                        obj.name = "Task ID: " + obj.id;
+                        obj.value = obj.task;
+
                         delete obj.id;
                         delete obj.task;
                         delete obj.completed;
                         return obj;
+
                     });
 
                     bot.sendMessage({
@@ -108,7 +110,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                     bot.sendMessage({
                         to: channelID,
                         embed: {
-                            Title: "Completed Tasks",
+                            title: "Completed Tasks",
                             color: 11027200,
                             fields: newResult
                         }
@@ -137,8 +139,8 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
                     // Create and set bool completed to 0 indicating the task is not done
                     // Store addedItem into a sql database so that tasks aren't lost on restart
-                    var sqlQuery = "INSERT INTO to_do_list(task) VALUES ('" + taskAdded + "')";
-                    db.query(sqlQuery, function(err, result) {
+                    var sqlQuery = "INSERT INTO to_do_list(task) VALUES (?)";
+                    db.query(sqlQuery, taskAdded, function(err, result) {
                         if (err) throw new Error(err);
                     });
 
@@ -164,8 +166,8 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
                 if (!isNaN(taskId)) {
                     logger.info("Trying to mark " + taskId + " completed.");
-                    var sqlQuery = "UPDATE to_do_list SET completed = true WHERE id = " + taskId;
-                    db.query(sqlQuery, function(err,result) {
+                    var sqlQuery = "UPDATE to_do_list SET completed = true WHERE id = ?";
+                    db.query(sqlQuery,[taskId], function(err,result) {
                         if (err) throw new Error(err);
 
                         if (result.affectedRows && !result.changedRows) {
