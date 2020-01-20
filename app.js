@@ -40,10 +40,9 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 bot.sendMessage({
                     to: channelID,
                     embed: {
-                        title: "Help is on the way!",
+                        title: "Help: Commands",
                         color: 11027200,
-                        fields: "Commands",
-                        description: display_Command_List
+                        fields: display_Command_List
                     }
                 });
 
