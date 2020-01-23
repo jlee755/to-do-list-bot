@@ -79,10 +79,10 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
                     if (err) throw new Error(err);
 
-                    var newResult = result.map(function(obj) {
+                    var newResult = result.map(function(obj,ind) {
 
                         // Converting the object to one that can be placed into 'fields' easily.
-                        obj.name = "Task ID: " + obj.id;
+                        obj.name = "Task #" + (ind+1);
                         obj.value = obj.task;
 
                         // Removing the objects that we don't want in 'fields'.
@@ -175,7 +175,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
                     bot.sendMessage({
                         to: channelID,
-                        message: user + " has added " + addedItem.join(" ") + " to the to-do list"          
+                        message: user + " has added \"" + addedItem.join(" ") + "\" to the to-do list"          
                     });
 
                 } else {
@@ -196,31 +196,56 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 if (!isNaN(taskId)) {
                     logger.info("Trying to mark " + taskId + " completed.");
 
-                    var sqlQuery = "UPDATE to_do_list SET completed = true WHERE id = ?";
-                    db.query(sqlQuery,[taskId], function(err,result) {
+                    // Probably going to have to make multiple queries since we need to
+                    // determine what the ID of the task is. Unless we keep an ongoing
+                    // memory of the mapping in the Node application... Not sure what
+                    // the best implementation is here.
+
+                    var sqlQuery = "SELECT id,task," +
+                                   "ROW_NUMBER() OVER (ORDER BY id ASC) " +
+                                   "FROM to_do_list " +
+                                   "WHERE completed=false " +
+                                   "ORDER BY id ASC";
+
+                    db.query(sqlQuery, function(err,result) {
                         if (err) throw new Error(err);
 
-                        // There was an ID match but no change to the completed column,
-                        // meaning that it's already marked complete.
-                        // This might not be an issue once task IDs are taken out entirely
-                        // from the user's view.
-                        if (result.affectedRows && !result.changedRows) {
-                            bot.sendMessage({
-                                to: channelID,
-                                message: "Task #" + taskId + " already complete."
+                        if (result[taskId-1]) {
+                            let taskField = result[taskId-1].task;
+                            taskId = result[taskId-1].id.toString();
+
+                            var sqlQuery = "UPDATE to_do_list SET completed = true WHERE id = ?";
+                            db.query(sqlQuery,[taskId], function(err,result) {
+                                if (err) throw new Error(err);
+
+                                // There was an ID match but no change to the completed column,
+                                // meaning that it's already marked complete.
+                                // This might not be an issue once task IDs are taken out entirely
+                                // from the user's view.
+                                if (result.affectedRows && !result.changedRows) {
+                                    bot.sendMessage({
+                                        to: channelID,
+                                        message: "Task \"" + taskField + "\" already complete."
+                                    });
+                                // There was an ID match and a successful update to the completed
+                                // column.
+                                } else if (result.affectedRows && result.changedRows) {
+                                    bot.sendMessage({
+                                        to: channelID,
+                                        message: "Marked task \"" + taskField + "\" complete."
+                                    });
+                                // There was no ID match.
+                                } else {
+                                    bot.sendMessage({
+                                        to: channelID,
+                                        message: "Not a proper task number."
+                                    });
+                                };
                             });
-                        // There was an ID match and a successful update to the completed
-                        // column.
-                        } else if (result.affectedRows && result.changedRows) {
-                            bot.sendMessage({
-                                to: channelID,
-                                message: "Marked task #" + taskId + " complete."
-                            });
-                        // There was no ID match.
                         } else {
                             bot.sendMessage({
                                 to: channelID,
-                                message: "No task with ID " + taskId + "."
+                                message: "This task number is not on the list!"
                             });
                         };
                     });
@@ -228,7 +253,7 @@ bot.on('message', function (user, userID, channelID, message, evt) {
                 } else {
                     bot.sendMessage({
                         to: channelID,
-                        message: taskId + " is not a valid task ID."
+                        message: "You must provide a proper task #."
                     });
                 }
             break;
