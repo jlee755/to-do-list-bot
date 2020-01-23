@@ -1,3 +1,4 @@
+var util = require('util')
 var mysql = require('mysql')
 var pool = mysql.createPool({
     connectionLimit: 5,
@@ -23,5 +24,8 @@ pool.getConnection((err, connection) => {
     if (connection) connection.release()
     return
 })
+
+// Promisify for Node.js async/await.
+pool.query = util.promisify(pool.query)
 
 module.exports = pool
