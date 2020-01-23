@@ -15,6 +15,7 @@ To-Do List Bot is a Discord bot that performs simple functions to add, update, a
 - [x] Update
 - [ ] Help
 - [ ] Info
+- [x] Complete
 
 ### Extras
 * Ability to use in other servers
