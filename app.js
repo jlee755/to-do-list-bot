@@ -22,6 +22,30 @@ bot.on('ready', function (evt) {
     logger.info(bot.username + ' - (' + bot.id + ')');
 });
 
+var roadmap =
+`## Roadmap
+
+### Commands
+- [x] Show Completed
+- [x] Show To-Do
+- [x] Add
+- [ ] Remove
+- [x] Update
+- [ ] Help
+- [ ] Info
+- [x] Complete
+
+### Extras
+* Ability to use in other servers
+* Remove completed tasks after a certain amount of time
+* Separate tasks into pages if it gets too long
+* Separate lists by desired categories (e.g. coding, factorio, etc.)
+
+## Authors
+* Sammy Chang
+* Joseph Kwon
+* Joshua Lee`
+
 var taskId;
 
 bot.on('message', function (user, userID, channelID, message, evt) {
@@ -57,11 +81,21 @@ bot.on('message', function (user, userID, channelID, message, evt) {
 
                     embed: {
 
-                        title: "Info aobut To-Do-List Bot",
+                        title: "To-Do-List Bot",
                         url: "https://github.com/jlee755/to-do-list-bot",
-                        description: "To-Do-List Bot info: \n" +
-                                     "Version: " + "lol jk" + "\n" +
-                                     "This bot does this and that"
+                        description: "To-Do List Bot is a " +
+                                     "Discord bot that performs " +
+                                     "simple functions to " +
+                                     "add, update, and remove tasks.\n\n" +
+                                     "Type \!help for a command list on the full " +
+                                     "features of To-Do List Bot.\n\n" +
+
+                                     "```md\n" +
+                                     roadmap + "\n" +
+                                     "```",
+                        footer: {
+                            text: "v0.1.0"
+                        }
                                 // Create an actual info. This is filler text
                     }
                 });
