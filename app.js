@@ -159,8 +159,12 @@ bot.on('message', function (user, userID, channelID, message, evt) {
             case "add":
 
                 let addedItem = args;
+                console.log(addedItem);
 
-                if(Array.isArray(addedItem) && addedItem.every(function(i){ return typeof i === "string" })){
+                if (Array.isArray(addedItem) &&
+                   addedItem.length > 0 &&
+                   addedItem.every(function(i){ return typeof i === "string" })
+                   ){
 
                     var taskAdded = addedItem.join(" ");
 
